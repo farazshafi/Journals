@@ -1,17 +1,92 @@
 ---
-
+// import CustomCursor from '../components/CustomCursor.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Scrapbook from '../components/Scrapbook.astro';
+import '../styles/global.css';
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Wanderlust — A personal travel journal of memories, roads, and stories from the Himalayas and beyond." />
+    <meta name="keywords" content="travel journal, Himalayas, Manali, Tosh, Kheerganga, wanderlust, travel stories, scrapbook" />
+    <meta property="og:title" content="Wanderlust. — Memories. Roads. Stories." />
+    <meta property="og:description" content="A personal travel journal of memories, roads, and stories from the mountains." />
+    <meta property="og:type" content="website" />
+    <title>Wanderlust. — Memories. Roads. Stories.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+
+    <!-- Custom Cursor (Desktop Only) -->
+    <!-- <CustomCursor /> -->
+
+    <!-- App Layout -->
+    <div class="app-container">
+
+      <!-- Sidebar Navigation -->
+      <Sidebar />
+
+      <!-- Main Scrapbook Content -->
+      <main>
+        <Scrapbook />
+      </main>
+
+    </div>
+
+    <!-- Subtle grain overlay -->
+    <div class="grain-overlay" aria-hidden="true"></div>
+
+  </body>
 </html>
+
+<style is:global>
+  /* Grain texture overlay for the whole page */
+  .grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    mix-blend-mode: overlay;
+  }
+
+  /* Entry animation for the whole page */
+  body {
+    animation: pageEntry 1.2s var(--ease-vintage) both;
+  }
+
+  @keyframes pageEntry {
+    from {
+      opacity: 0;
+      transform: scale(0.99);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* On mobile, stack sidebar on top of main */
+  @media (max-width: 1023px) {
+    .app-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+    }
+
+    main {
+      min-height: 70vh;
+      padding: 2rem 1rem 3rem;
+    }
+  }
+</style>

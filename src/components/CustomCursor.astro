@@ -1,0 +1,219 @@
+---
+---
+<div class="custom-cursor-wrapper" id="custom-cursor-container">
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-ring" id="cursor-ring">
+    <div class="compass-marker n">N</div>
+    <div class="compass-marker e">E</div>
+    <div class="compass-marker s">S</div>
+    <div class="compass-marker w">W</div>
+  </div>
+</div>
+
+<script>
+  class CompassCursor {
+    dot: HTMLElement | null;
+    ring: HTMLElement | null;
+    container: HTMLElement | null;
+    
+    // Coordinates
+    mouse = { x: 0, y: 0 };
+    ringPos = { x: 0, y: 0 };
+    
+    // Easing speed
+    speed = 0.15;
+    
+    // State
+    isVisible = false;
+    isHovered = false;
+
+    constructor() {
+      this.dot = document.getElementById('cursor-dot');
+      this.ring = document.getElementById('cursor-ring');
+      this.container = document.getElementById('custom-cursor-container');
+      
+      // Only initialize on desktop / devices with pointer: fine & hover: hover
+      const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (!supportsHover) {
+        if (this.container) this.container.style.display = 'none';
+        return;
+      }
+
+      document.body.classList.add('custom-cursor-active');
+      this.init();
+    }
+
+    init() {
+      // Event listeners
+      window.addEventListener('mousemove', (e) => this.onMouseMove(e));
+      document.addEventListener('mouseenter', () => this.onMouseEnter());
+      document.addEventListener('mouseleave', () => this.onMouseLeave());
+
+      // Hover bindings
+      this.setupHoverListeners();
+
+      // Start animation loop
+      requestAnimationFrame(() => this.tick());
+    }
+
+    onMouseMove(e: MouseEvent) {
+      if (!this.isVisible) {
+        this.isVisible = true;
+        if (this.container) this.container.style.opacity = '1';
+      }
+      this.mouse.x = e.clientX;
+      this.mouse.y = e.clientY;
+
+      // Direct move for dot (no lag)
+      if (this.dot) {
+        this.dot.style.transform = `translate3d(${this.mouse.x}px, ${this.mouse.y}px, 0)`;
+      }
+    }
+
+    onMouseEnter() {
+      this.isVisible = true;
+      if (this.container) this.container.style.opacity = '1';
+    }
+
+    onMouseLeave() {
+      this.isVisible = false;
+      if (this.container) this.container.style.opacity = '0';
+    }
+
+    setupHoverListeners() {
+      const updateHoverState = () => {
+        // Find all links, buttons and elements with role/data-hover
+        const hoverables = document.querySelectorAll('a, button, [role="button"], .hoverable');
+        
+        hoverables.forEach((el) => {
+          el.addEventListener('mouseenter', () => {
+            this.isHovered = true;
+            this.container?.classList.add('hovered');
+          });
+          el.addEventListener('mouseleave', () => {
+            this.isHovered = false;
+            this.container?.classList.remove('hovered');
+          });
+        });
+      };
+
+      updateHoverState();
+
+      // Mutation observer to wire up new dynamically loaded elements
+      const observer = new MutationObserver(updateHoverState);
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    tick() {
+      // Lerp (Linear Interpolation) for the ring trailing effect
+      const dx = this.mouse.x - this.ringPos.x;
+      const dy = this.mouse.y - this.ringPos.y;
+      
+      this.ringPos.x += dx * this.speed;
+      this.ringPos.y += dy * this.speed;
+
+      if (this.ring) {
+        this.ring.style.transform = `translate3d(${this.ringPos.x}px, ${this.ringPos.y}px, 0)`;
+      }
+
+      requestAnimationFrame(() => this.tick());
+    }
+  }
+
+  // Initialize
+  new CompassCursor();
+</script>
+
+<style>
+  .custom-cursor-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cursor-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-brass);
+    border-radius: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 10001;
+    pointer-events: none;
+    transition: transform 0.05s linear, background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .cursor-ring {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--color-brass-dark);
+    border-radius: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 10000;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.3s var(--ease-vintage), height 0.3s var(--ease-vintage), border-color 0.3s ease, border-style 0.3s ease;
+  }
+
+  /* Compass Markers (N, E, S, W) - Hidden by default, fade in on hover */
+  .compass-marker {
+    position: absolute;
+    font-family: var(--font-sans);
+    font-size: 6px;
+    font-weight: 700;
+    color: var(--color-brass-light);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .compass-marker.n { top: 2px; }
+  .compass-marker.e { right: 3px; }
+  .compass-marker.s { bottom: 2px; }
+  .compass-marker.w { left: 3px; }
+
+  /* Hover States */
+  .custom-cursor-wrapper.hovered .cursor-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px var(--color-brass-light);
+  }
+
+  .custom-cursor-wrapper.hovered .cursor-ring {
+    width: 50px;
+    height: 50px;
+    border-color: var(--color-brass-light);
+    border-style: dashed;
+    animation: spin-compass 12s linear infinite;
+  }
+
+  .custom-cursor-wrapper.hovered .compass-marker {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Keep markers upright when compass rotates */
+  .custom-cursor-wrapper.hovered .compass-marker.n { transform: rotate(0deg); }
+  .custom-cursor-wrapper.hovered .compass-marker.e { transform: rotate(0deg); }
+  .custom-cursor-wrapper.hovered .compass-marker.s { transform: rotate(0deg); }
+  .custom-cursor-wrapper.hovered .compass-marker.w { transform: rotate(0deg); }
+
+  @keyframes spin-compass {
+    from {
+      transform: translate3d(-50%, -50%, 0) rotate(0deg);
+    }
+    to {
+      transform: translate3d(-50%, -50%, 0) rotate(360deg);
+    }
+  }
+</style>
