@@ -1,8 +1,9 @@
 ---
 // import CustomCursor from '../components/CustomCursor.astro';
-import Sidebar from '../components/Sidebar.astro';
-import Scrapbook from '../components/Scrapbook.astro';
-import '../styles/global.css';
+import Sidebar from "../components/Sidebar.astro";
+import Scrapbook from "../components/Scrapbook.astro";
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
 ---
 
 <html lang="en">
@@ -12,23 +13,34 @@ import '../styles/global.css';
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content="Wanderlust — A personal travel journal of memories, roads, and stories from the Himalayas and beyond." />
-    <meta name="keywords" content="travel journal, Himalayas, Manali, Tosh, Kheerganga, wanderlust, travel stories, scrapbook" />
-    <meta property="og:title" content="Wanderlust. — Memories. Roads. Stories." />
-    <meta property="og:description" content="A personal travel journal of memories, roads, and stories from the mountains." />
+    <meta
+      name="description"
+      content="Wanderlust — A personal travel journal of memories, roads, and stories from the Himalayas and beyond."
+    />
+    <meta
+      name="keywords"
+      content="travel journal, Himalayas, Manali, Tosh, Kheerganga, wanderlust, travel stories, scrapbook"
+    />
+    <meta
+      property="og:title"
+      content="Wanderlust. — Memories. Roads. Stories."
+    />
+    <meta
+      property="og:description"
+      content="A personal travel journal of memories, roads, and stories from the mountains."
+    />
     <meta property="og:type" content="website" />
     <title>Wanderlust. — Memories. Roads. Stories.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <ClientRouter />
   </head>
   <body>
-
     <!-- Custom Cursor (Desktop Only) -->
     <!-- <CustomCursor /> -->
 
     <!-- App Layout -->
     <div class="app-container">
-
       <!-- Sidebar Navigation -->
       <Sidebar />
 
@@ -36,12 +48,10 @@ import '../styles/global.css';
       <main>
         <Scrapbook />
       </main>
-
     </div>
 
     <!-- Subtle grain overlay -->
     <div class="grain-overlay" aria-hidden="true"></div>
-
   </body>
 </html>
 

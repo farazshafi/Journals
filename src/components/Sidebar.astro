@@ -245,16 +245,24 @@
 </aside>
 
 <!-- Audio Elements -->
-<audio id="bg-wind-audio" src="/assets/sounds/wind.mp3" loop></audio>
-<audio id="page-flip-audio" src="/assets/sounds/page%20flip.mp3"></audio>
+<audio id="bg-wind-audio" src="/assets/sounds/wind.mp3" loop transition:persist
+></audio>
+<audio
+  id="page-flip-audio"
+  src="/assets/sounds/page%20flip.mp3"
+  transition:persist></audio>
 
 <script>
   // Audio Handling
-  const windAudio = document.getElementById("bg-wind-audio");
-  const flipAudio = document.getElementById("page-flip-audio");
+  const windAudio = document.getElementById(
+    "bg-wind-audio",
+  ) as HTMLAudioElement | null;
+  const flipAudio = document.getElementById(
+    "page-flip-audio",
+  ) as HTMLAudioElement | null;
   const muteBtn = document.getElementById("mute-toggle");
-  const iconOn = muteBtn?.querySelector(".icon-on");
-  const iconOff = muteBtn?.querySelector(".icon-off");
+  const iconOn = muteBtn?.querySelector(".icon-on") as HTMLElement | null;
+  const iconOff = muteBtn?.querySelector(".icon-off") as HTMLElement | null;
 
   let isMuted = localStorage.getItem("audioMuted") === "true";
   let hasInteracted = false;
@@ -302,7 +310,7 @@
 
   muteBtn?.addEventListener("click", () => {
     isMuted = !isMuted;
-    localStorage.setItem("audioMuted", isMuted);
+    localStorage.setItem("audioMuted", String(isMuted));
     updateMuteUI();
     // Ensure background audio is initialized/played even if muted
     // so it's ready as soon as the user unmutes.

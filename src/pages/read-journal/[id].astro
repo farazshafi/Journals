@@ -1,0 +1,214 @@
+---
+import { journeys } from "../../data/journeys";
+import BookReader from "../../components/book/BookReader";
+import { ClientRouter } from "astro:transitions";
+import "../../styles/global.css";
+
+export function getStaticPaths() {
+    return journeys.map((journey) => ({
+        params: { id: journey.id },
+        props: { journey },
+    }));
+}
+
+const { id } = Astro.params;
+const { journey } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{journey.title} — Virtual Journal</title>
+        <ClientRouter />
+    </head>
+    <body>
+        <main class="detail-container">
+            <!-- Background Image -->
+            <div class="bg-wrapper">
+                <img
+                    src="/assets/book%20background%20talbe.webp"
+                    alt="Journal Background"
+                    class="background-image"
+                />
+            </div>
+
+            <!-- Navigation Overlay -->
+            <nav class="top-nav">
+                <a href="/" class="back-btn">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><line x1="19" y1="12" x2="5" y2="12"></line><polyline
+                            points="12 19 5 12 12 5"></polyline></svg
+                    >
+                    Go Back
+                </a>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="content-wrapper">
+                <BookReader client:load book={journey.bookData} />
+            </div>
+        </main>
+
+        <!-- Subtle grain overlay -->
+        <div class="grain-overlay" aria-hidden="true"></div>
+    </body>
+</html>
+
+<style>
+    :root {
+        --ease-vintage: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: #fff;
+        font-family: var(--font-sans, sans-serif);
+        overflow: hidden; /* Detail page is a full-screen view */
+    }
+
+    .detail-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bg-wrapper {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .background-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.9;
+        animation: zoomIn 40s linear infinite alternate;
+    }
+
+    @keyframes zoomIn {
+        from {
+            transform: scale(1);
+        }
+        to {
+            transform: scale(1.1);
+        }
+    }
+
+    .top-nav {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        z-index: 10;
+    }
+
+    .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #fff;
+        text-decoration: none;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.75rem 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+        transition: all 0.3s var(--ease-vintage);
+    }
+
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-5px);
+        border-color: #fff;
+    }
+
+    .content-header {
+        text-align: center;
+        z-index: 5;
+        animation: fadeInUp 1s var(--ease-vintage) both;
+    }
+
+    .journal-title {
+        font-family: var(--font-handwritten, cursive);
+        font-size: 5rem;
+        margin: 0;
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        background: linear-gradient(to bottom, #fff, #ccc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .journal-date {
+        font-family: var(--font-mono, monospace);
+        font-size: 1.2rem;
+        opacity: 0.6;
+        letter-spacing: 0.3em;
+        margin-top: 1rem;
+        text-transform: uppercase;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .grain-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 5;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        .journal-title {
+            font-size: 3rem;
+        }
+        .top-nav {
+            top: 1rem;
+            left: 1rem;
+        }
+    }
+</style>

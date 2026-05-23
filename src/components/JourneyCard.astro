@@ -1,5 +1,6 @@
 ---
 interface Props {
+    id: string;
     image: string;
     title: string;
     date: string;
@@ -9,7 +10,7 @@ interface Props {
     slotNum?: string;
 }
 
-const { image, title, date, days, regions, pages, slotNum } = Astro.props;
+const { id, image, title, date, days, regions, pages, slotNum } = Astro.props;
 ---
 
 <div class="journey-card">
@@ -91,7 +92,7 @@ const { image, title, date, days, regions, pages, slotNum } = Astro.props;
             </div>
 
             <!-- Action Button -->
-            <button class="read-journal-btn">
+            <a href={`/read-journal/${id}`} class="read-journal-btn">
                 <span>Read Journal</span>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +108,7 @@ const { image, title, date, days, regions, pages, slotNum } = Astro.props;
                     ><line x1="5" y1="12" x2="19" y2="12"></line><polyline
                         points="12 5 19 12 12 19"></polyline></svg
                 >
-            </button>
+            </a>
         </div>
     </div>
 </div>
@@ -247,7 +248,7 @@ const { image, title, date, days, regions, pages, slotNum } = Astro.props;
         font-size: 0.85rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        text-decoration: none;
         cursor: pointer;
         transition:
             background 0.3s ease,
