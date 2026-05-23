@@ -1,5 +1,7 @@
 ---
-
+import JourneyHeader from "./JourneyHeader.astro";
+import JourneyCard from "./JourneyCard.astro";
+import { journeys } from "../data/journeys";
 ---
 
 <div class="scrapbook-outer">
@@ -211,6 +213,50 @@
   </div><!-- / notebook-spread -->
   <!-- Journeys Only Image -->
   <div class="journeys-only-container">
+    <JourneyHeader />
+
+    <div class="journey-carousel-wrapper">
+      <button class="carousel-nav prev" id="journey-prev" aria-label="Previous">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><polyline points="15 18 9 12 15 6"></polyline></svg
+        >
+      </button>
+
+      <div class="journey-cards-viewport">
+        <div class="cards-grid" id="journey-grid">
+          {
+            journeys.map((journey, index) => (
+              <JourneyCard slotNum={`Slot ${index + 1}`} {...journey} />
+            ))
+          }
+        </div>
+      </div>
+
+      <button class="carousel-nav next" id="journey-next" aria-label="Next">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><polyline points="9 18 15 12 9 6"></polyline></svg
+        >
+      </button>
+    </div>
+
     <img src="/assets/jouranals.webp" alt="Journals" class="journeys-image" />
   </div>
 </div><!-- / scrapbook-outer -->
@@ -284,23 +330,47 @@
     },
   ];
 
-  const shuffleBtn = document.getElementById("shuffle-btn");
-  if (shuffleBtn) {
-    shuffleBtn.addEventListener("click", () => {
-      const mem = memories[Math.floor(Math.random() * memories.length)];
-      const card = shuffleBtn.closest(".random-memory-card");
-      if (card) {
-        const dateEl = card.querySelector(".random-date");
-        const textEl = card.querySelector(".random-text");
-        const tagRow = card.querySelector(".random-tag-row");
-        if (dateEl) dateEl.textContent = mem.date;
-        if (textEl) textEl.textContent = mem.text;
-        if (tagRow)
-          tagRow.innerHTML = mem.tags
-            .map((t) => `<span class="tag-pill small">${t}</span>`)
-            .join("");
+  // Journey Carousel Logic
+  const journeyGrid = document.getElementById("journey-grid");
+  const journeyPrev = document.getElementById("journey-prev");
+  const journeyNext = document.getElementById("journey-next");
+  let journeyIdx = 0;
+
+  if (journeyGrid && journeyPrev && journeyNext) {
+    const updateJourneyCarousel = () => {
+      // 320px card width + 40px gap = 360px
+      const shift = journeyIdx * 360;
+      journeyGrid.style.transform = `translateX(-${shift}px)`;
+
+      // Update button visibility
+      journeyPrev.style.opacity = journeyIdx === 0 ? "0.3" : "1";
+      journeyPrev.style.pointerEvents = journeyIdx === 0 ? "none" : "auto";
+
+      // Assuming 4 cards visible in viewport (adjust if needed)
+      const visibleCount = 4;
+      const maxIdx = Math.max(0, journeyGrid.children.length - visibleCount);
+      journeyNext.style.opacity = journeyIdx >= maxIdx ? "0.3" : "1";
+      journeyNext.style.pointerEvents = journeyIdx >= maxIdx ? "none" : "auto";
+    };
+
+    journeyNext.addEventListener("click", () => {
+      const visibleCount = 4;
+      const maxIdx = Math.max(0, journeyGrid.children.length - visibleCount);
+      if (journeyIdx < maxIdx) {
+        journeyIdx++;
+        updateJourneyCarousel();
       }
     });
+
+    journeyPrev.addEventListener("click", () => {
+      if (journeyIdx > 0) {
+        journeyIdx--;
+        updateJourneyCarousel();
+      }
+    });
+
+    // Init buttons
+    updateJourneyCarousel();
   }
 </script>
 
@@ -355,16 +425,51 @@
     align-items: center;
   }
 
-  .journeys-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Fill the whole screen */
-    filter: brightness(0.8);
+  .journey-carousel-wrapper {
+    position: absolute;
+    top: 10rem;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    z-index: 1002;
   }
 
-  /* Allow clicking back to other tabs by showing a close button or just relying on sidebar? 
-     Actually, if it's full width/height fixed, the sidebar is hidden. 
-     The user might want it to be behind the sidebar? */
+  .journey-cards-viewport {
+    width: 1400px;
+    overflow: hidden;
+    padding: 3rem 0;
+  }
+
+  .cards-grid {
+    display: flex;
+    gap: 40px;
+    width: max-content;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .carousel-nav {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .carousel-nav:hover {
+    background: rgba(189, 162, 116, 0.4);
+    border-color: var(--color-brass);
+    transform: scale(1.1);
+  }
+
   .scrapbook-outer.journeys-mode .journeys-only-container {
     left: 350px; /* Stay to the right of the sidebar */
     width: calc(100vw - 350px);
@@ -376,6 +481,18 @@
       width: 100vw;
       top: 280px; /* Below mobile sidebar */
       height: calc(100vh - 280px);
+    }
+
+    .journey-carousel-wrapper {
+      top: 8rem;
+    }
+
+    .journey-cards-viewport {
+      width: 300px;
+    }
+
+    .cards-grid {
+      grid-template-rows: repeat(2, 380px);
     }
   }
 

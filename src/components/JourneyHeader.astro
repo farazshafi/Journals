@@ -1,0 +1,77 @@
+---
+
+---
+
+<header class="journey-header">
+    <div class="header-content">
+        <h1 class="journey-title animate-text">Read Journals</h1>
+        <p class="journey-subtitle animate-text">
+            Choose a journey to open your memories.
+        </p>
+    </div>
+</header>
+
+<style>
+    .journey-header {
+        position: absolute;
+        top: 4rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        text-align: center;
+        z-index: 1001;
+        pointer-events: none;
+    }
+
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .journey-title {
+        font-family: var(--font-handwritten);
+        font-size: 4rem;
+        font-weight: 500;
+        color: #000;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    .journey-subtitle {
+        font-family: var(--font-handwritten);
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.7);
+        margin: 0;
+    }
+
+    /* Simple Fade In Animation */
+    .animate-text {
+        animation: simpleFadeIn 1s var(--ease-vintage) both;
+    }
+
+    @keyframes simpleFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .journey-header {
+            top: 2rem;
+        }
+        .journey-title {
+            font-size: 1.8rem;
+        }
+        .journey-subtitle {
+            font-size: 0.95rem;
+        }
+    }
+</style>
