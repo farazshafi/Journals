@@ -8,7 +8,11 @@ export interface Block {
     width?: string;
     height?: string;
     zIndex?: number;
+    textAlign?: "left" | "center" | "right";
+    rotation?: string;
+    scale?: number;
 }
+
 
 export default function BlockRenderer({ block }: { block: Block }) {
     const style: React.CSSProperties = {
@@ -18,7 +22,8 @@ export default function BlockRenderer({ block }: { block: Block }) {
         width: block.width,
         height: block.height,
         zIndex: block.zIndex ?? 1,
-        transform: "translate(-50%, -50%)",
+        textAlign: block.textAlign || "center",
+        transform: `translate(-50%, -50%) ${block.rotation ? `rotate(${block.rotation})` : ""} scale(${block.scale || 1})`,
     }
 
     if (block.type === "title") {
@@ -50,9 +55,11 @@ export default function BlockRenderer({ block }: { block: Block }) {
 
     if (block.type === "quote") {
         return (
-            <blockquote className="block block--quote" style={style}>
-                {block.content}
-            </blockquote>
+            <div className="block block--sticky-note" style={style}>
+                <blockquote className="quote-content">
+                    {block.content}
+                </blockquote>
+            </div>
         )
     }
 

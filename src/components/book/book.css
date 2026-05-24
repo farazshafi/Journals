@@ -84,12 +84,49 @@
   position: absolute;
 }
 
-.block--quote {
+.block--sticky-note {
+  background-image: url('/assets/quoute-background.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  padding: 25px 30px; /* Reduced padding to give more space to text */
+  box-shadow: 2px 10px 30px rgba(0,0,0,0.2);
+  min-width: 100px;
+  border: none;
+}
+
+.sticky-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 2;
+}
+
+.ancient-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0.25;
+  color: #3d2f1f;
+  pointer-events: none;
+}
+
+.quote-content {
+  font-family: var(--font-handwritten, 'Caveat', cursive);
   font-style: italic;
-  text-align: center;
-  opacity: 0.85;
-  border-left: 3px solid rgba(0, 0, 0, 0.2);
-  padding-left: 12px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #3d2f1f;
+  margin: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .block--divider {
@@ -112,15 +149,15 @@
 
 h1.block {
   font-size: 22px;
-  font-weight: 700;
-  text-align: center;
+  font-weight: 700; 
   line-height: 1.2;
 }
 
 p.block {
   font-size: 14px;
   line-height: 1.7;
-  text-align: center;
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 300;
 }
 
 blockquote.block {
