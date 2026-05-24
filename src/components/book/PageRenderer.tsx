@@ -1,14 +1,24 @@
 /** @jsxImportSource react */
-import BlockRenderer from "./BlockRenderer"
+import BlockRenderer, { type Block } from "./BlockRenderer"
 
-export default function PageRenderer({ page }) {
+export interface Page {
+    id: string
+    background?: string
+    blocks: Block[]
+}
+
+export default function PageRenderer({ page }: { page: Page }) {
     return (
-        <div className="book-page">
-            {page.blocks.map((block, index) => (
-                <BlockRenderer
-                    key={index}
-                    block={block}
-                />
+        <div
+            className="book-page"
+            style={{
+                backgroundImage: page.background ? `url(${page.background})` : undefined,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
+        >
+            {page.blocks.map((block: Block, index: number) => (
+                <BlockRenderer key={index} block={block} />
             ))}
         </div>
     )
