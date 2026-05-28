@@ -31,7 +31,7 @@ export default function BookLayout({ layout, scale = 1, leftPage, rightPage }: B
                 width: layout.width,
                 height: layout.height,
                 transform: `scale(${scale})`,
-                transformOrigin: "top center",
+                transformOrigin: "center center",
             }}
         >
             <img

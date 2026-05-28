@@ -22,6 +22,7 @@ export default function BlockRenderer({ block }: { block: Block }) {
         width: block.width,
         height: block.height,
         zIndex: block.zIndex ?? 1,
+        mixBlendMode: "multiply",
         textAlign: block.textAlign || "center",
         transform: `translate(-50%, -50%) ${block.rotation ? `rotate(${block.rotation})` : ""} scale(${block.scale || 1})`,
     }
