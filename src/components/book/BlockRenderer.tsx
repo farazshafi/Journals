@@ -11,20 +11,25 @@ export interface Block {
     textAlign?: "left" | "center" | "right";
     rotation?: string;
     scale?: number;
+    fontSize?: string;
+    mobile?: Partial<Block>; // Mobile-specific overrides
 }
 
 
-export default function BlockRenderer({ block }: { block: Block }) {
+export default function BlockRenderer({ block, isMobile = false }: { block: Block, isMobile?: boolean }) {
+    // Merge mobile overrides if we are on mobile
+    const activeBlock = isMobile && block.mobile ? { ...block, ...block.mobile } : block;
+
     const style: React.CSSProperties = {
         position: "absolute",
-        left: block.x || "50%",
-        top: block.y || "50%",
-        width: block.width,
-        height: block.height,
-        zIndex: block.zIndex ?? 1,
-        mixBlendMode: "multiply",
-        textAlign: block.textAlign || "center",
-        transform: `translate(-50%, -50%) ${block.rotation ? `rotate(${block.rotation})` : ""} scale(${block.scale || 1})`,
+        left: activeBlock.x || "50%",
+        top: activeBlock.y || "50%",
+        width: activeBlock.width,
+        height: activeBlock.height,
+        zIndex: activeBlock.zIndex ?? 1,
+        textAlign: activeBlock.textAlign || "center",
+        fontSize: activeBlock.fontSize,
+        transform: `translate(-50%, -50%) ${activeBlock.rotation ? `rotate(${activeBlock.rotation})` : ""} scale(${activeBlock.scale || 1})`,
     }
 
     if (block.type === "title") {

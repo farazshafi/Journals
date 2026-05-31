@@ -36,6 +36,7 @@
 .page-area {
   position: absolute;
   overflow: hidden;
+  mix-blend-mode: multiply;
 }
 
 /* ===== FALLBACK SPREAD (no layout config) ===== */
@@ -53,8 +54,8 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
+  background: transparent;
+  overflow: hidden; /* Prevent content from leaking between pages */
 }
 
 /* Fallback spread pages still need their own size */
@@ -168,6 +169,7 @@ blockquote.block {
 
 img.block {
   object-fit: contain;
+  pointer-events: none;
 }
 
 /* ===== BOTTOM NAVBAR ===== */
@@ -328,6 +330,126 @@ img.block {
 }
 
 /* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .book-reader.is-mobile {
+    padding: 0;
+  }
+
+  .book-reader.is-mobile .book-main-view {
+    height: calc(100vh - 100px); /* Taller navbar on mobile maybe or just more space */
+    padding-bottom: 20px;
+  }
+
+  .book-reader.is-mobile .book-navbar {
+    height: 100px;
+    padding: 0 20px;
+    background: rgba(15, 12, 10, 0.95);
+  }
+
+  .book-reader.is-mobile .nav-btn {
+    padding: 15px;
+    border-radius: 50%;
+  }
+
+  .book-reader.is-mobile .page-indicator {
+    margin-left: 0;
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+  
+
+  .book-reader.is-mobile h1.block {
+    font-size: 16px !important;
+  }
+
+  .book-reader.is-mobile p.block {
+    font-size: 14px !important;
+    line-height: 1.4;
+  }
+
+  .book-reader.is-mobile blockquote.block,
+  .book-reader.is-mobile .quote-content {
+    font-size: 1rem !important;
+  }
+}
+
+/* ===== LAYOUT TOOLS OVERLAY ===== */
+
+.layout-tools-overlay {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(15, 12, 10, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 150;
+  animation: slideUp 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  width: 100%;
+}
+
+.tool-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-control label {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #bda274;
+  letter-spacing: 0.1em;
+}
+
+.tool-control input[type="range"] {
+  width: 100%;
+  height: 4px;
+}
+
+.close-tools {
+  align-self: flex-end;
+  background: #bda274;
+  color: #120b08;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-tools:hover {
+  background: #f3e7c9;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .layout-tools-overlay {
+    padding: 15px;
+  }
+  .tools-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
 
 @media (max-width: 1100px) {
   .book-reader {

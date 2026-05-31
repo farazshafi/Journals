@@ -6,6 +6,7 @@ export interface LayoutArea {
     y: string
     width: string
     height: string
+    rotation?: string
 }
 
 export interface BookLayoutConfig {
@@ -48,6 +49,7 @@ export default function BookLayout({ layout, scale = 1, leftPage, rightPage }: B
                         top: layout.leftPage.y,
                         width: layout.leftPage.width,
                         height: layout.leftPage.height,
+                        transform: layout.leftPage.rotation ? `rotate(${layout.leftPage.rotation})` : undefined,
                     }}
                 >
                     {leftPage}
@@ -62,6 +64,7 @@ export default function BookLayout({ layout, scale = 1, leftPage, rightPage }: B
                         top: layout.rightPage.y,
                         width: layout.rightPage.width,
                         height: layout.rightPage.height,
+                        transform: layout.rightPage.rotation ? `rotate(${layout.rightPage.rotation})` : undefined,
                     }}
                 >
                     {rightPage}

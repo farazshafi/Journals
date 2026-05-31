@@ -36,6 +36,24 @@ export const journeys: Journey[] = [
                     height: "80%",
                 },
             },
+            mobileLayout: {
+                background: "/assets/mobile-book.webp",
+                width: "100%",
+                leftPage: {
+                    x: "18%",
+                    y: "9%",
+                    width: "70%",
+                    height: "81%",
+                    rotation: "356deg",
+                },
+                rightPage: {
+                    x: "18%",
+                    y: "9%",
+                    width: "70%",
+                    height: "81%",
+                    rotation: "356deg",
+                },
+            },
             chapters: [
                 {
                     id: "chapter-1",
@@ -72,7 +90,11 @@ export const journeys: Journey[] = [
                                     x: "34%",
                                     y: "45%",
                                     width: "78%",
-                                    zIndex: 10
+                                    zIndex: 10,
+                                    mobile:{
+                                        width:"70%",
+                                        y:"48%"
+                                    }
                                 },
 
                                 {
@@ -80,11 +102,19 @@ export const journeys: Journey[] = [
                                     content: "The journey of a thousand miles begins with a single step.",
                                     x: "80%",
                                     width: "48%",
-                                    textAlign: "left",
+                                    textAlign: "center",
                                     y: "50%",
                                     zIndex: 10,
                                     rotation: "-9deg",
-                                    scale: 0.9
+                                    scale: 0.9,
+                                    fontSize: "1.2rem",
+                                    mobile: {
+                                        x: "80%",
+                                        y:"50%",
+                                        width: "50%",
+                                        // height:"18%",
+                                        fontSize: "0.9rem"
+                                    }
                                 },
 
                                 {
@@ -141,7 +171,7 @@ export const journeys: Journey[] = [
                                     rotation: "1deg",
                                     textAlign: "left",
                                     scale: 0.9,
-                                    zIndex: 10
+                                    zIndex: 11
                                 },
 
                                 {
@@ -150,7 +180,7 @@ export const journeys: Journey[] = [
                                     x: "70%",
                                     y: "35%",
                                     width: "50%",
-                                    zIndex: 9
+                                    zIndex: 4
                                 },
 
                                 {
@@ -283,7 +313,7 @@ export const journeys: Journey[] = [
                                     content:
                                         "As the train slowly entered the city, I saw something I wish I never had to see. Near the tracks, a man was lying motionless, bleeding heavily from his head. Dark red blood had spread across the ground beside him. I still don’t know what happened to him — whether it was an accident, violence, or something worse. The train moved slowly past him, forcing us to witness every second of it. That image stayed in my head silently after that.",
                                     x: "50%",
-                                    y: "30%",
+                                    y: "32%",
                                     width: "90%",
                                     textAlign: "center",
                                     zIndex: 10
@@ -331,7 +361,7 @@ export const journeys: Journey[] = [
                                     content:
                                         "Delhi itself felt harsh to my eyes. Near the railway tracks and stations, I saw people openly using the sides of the tracks as toilets. Dirt, smell, and chaos everywhere. It felt shocking and uncomfortable because it was so different from what I had imagined.",
                                     x: "33%",
-                                    y: "25%",
+                                    y: "26%",
                                     width: "59%",
                                     textAlign: "center",
                                     zIndex: 10
@@ -349,7 +379,7 @@ export const journeys: Journey[] = [
                                 {
                                     type: "divider",
                                     x: "50%",
-                                    y: "40%",
+                                    y: "44%",
                                     width: "65%",
                                     zIndex: 10
                                 },
@@ -358,7 +388,7 @@ export const journeys: Journey[] = [
                                     type: "title",
                                     content: "Punjab Stops",
                                     x: "50%",
-                                    y: "45%",
+                                    y: "49%",
                                     width: "90%",
                                     textAlign: "center",
                                     zIndex: 10
@@ -369,7 +399,7 @@ export const journeys: Journey[] = [
                                     content:
                                         "Later, somewhere in Punjab, the train stopped for a long time. I remember seeing Punjabis properly for the first time — the turbans, long beards, the way they carried themselves. Everything felt unfamiliar, but interesting at the same time.",
                                     x: "50%",
-                                    y: "56%",
+                                    y: "62%",
                                     width: "90%",
                                     zIndex: 10
                                 },
@@ -377,7 +407,7 @@ export const journeys: Journey[] = [
                                 {
                                     type: "divider",
                                     x: "50%",
-                                    y: "66%",
+                                    y: "73%",
                                     width: "65%",
                                     zIndex: 10
                                 },
@@ -386,7 +416,7 @@ export const journeys: Journey[] = [
                                     type: "title",
                                     content: "Yafi's Power Bank",
                                     x: "50%",
-                                    y: "72%",
+                                    y: "78%",
                                     width: "90%",
                                     textAlign: "center",
                                     zIndex: 10
@@ -396,7 +426,7 @@ export const journeys: Journey[] = [
                                     type: "text",
                                     content: "Yafi proudly carried the “best” power bank for the whole journey, but when we finally tried it on the train, it turned out to be completely dead — and the rest of the trip became endless trolling and laughter.",
                                     x: "50%",
-                                    y: "81%",
+                                    y: "88%",
                                     width: "90%",
                                     zIndex: 10
                                 },
